@@ -19,6 +19,7 @@ namespace Parcial2_PA2.Models
         {
             LlamadaId = 0;
             Descripcion = string.Empty;
+            Detalles = new List<LlamadaDetalles>();
         }
                     
     }

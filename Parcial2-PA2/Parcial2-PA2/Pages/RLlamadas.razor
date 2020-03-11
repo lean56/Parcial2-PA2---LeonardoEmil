@@ -1,0 +1,150 @@
+﻿@page "/rllamadas"
+
+
+<h3>Registro de Llamadas</h3>
+
+<EditForm Model="Llamada" OnValidSubmit="Guardar">
+	<DataAnnotationsValidator/>
+
+	<div class="container">
+		<div class="form-group">
+			<label for="llamadaid">Id</label>
+			<div class="input-group col-3">
+				<InputNumber @bind-Value="@Llamada.LlamadaId" class="form-control" />
+				<ValidationMessage For="@(()=>Llamada.LlamadaId)" />
+				<button type="button" class="btn btn-outline-primary" @onclick="Buscar">Buscar</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="descripcion">Descripcion</label>
+			<div class="input-group col-3">
+				<InputText @bind-Value="@Llamada.Descripcion" class="form-control" />
+				<ValidationMessage For="@(()=>Llamada.Descripcion)" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="problemas">Problemas</label>
+			<div class="input-group col-3">
+				<InputText @bind-Value="@Problemas" class="form-control" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="solucion">Solucion</label>
+			<div class="input-group col-3">
+				<InputText @bind-Value="@Solucion" class="form-control" />
+				<button type="button" class="btn btn-outline-secondary" @onclick="AgregarLlamada">Agregar</button>
+			</div>	
+		</div>
+
+		<table class="table">
+			<thead class="thead-dark">
+				<tr>
+					<td>Id</td>
+					<td>Problema</td>
+					<td>Solucion</td>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Llamada.Detalles)
+				{
+					<tr>
+						<td>@item.LlamadaDetalleId</td>
+						<td>@item.Problemas</td>
+						<td>@item.Solucion</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="form-group">
+		<button type="button" class="btn btn-outline-info" @onclick="Limpiar">Limpiar</button>
+		<button type="submit" class="btn btn-outline-success" >Guardar</button>
+		<button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
+	</div>
+
+	<h5 class="text-success">@mensaje</h5>
+</EditForm>
+
+@code {
+
+	protected override void OnInitialized()
+	{
+		Llamada = new Llamadas();
+	}
+
+	public Llamadas Llamada { get; set; }
+	private string mensaje;
+	private string Problemas;
+	private string Solucion;
+
+
+	LlamadaController controller = new LlamadaController();
+
+	public void Guardar()
+	{
+		if (controller.Guardar(Llamada))
+		{
+			mensaje = "Llamada Registrada";
+		}
+		else
+		{
+			mensaje = "Error al Registrar Llamada";
+		}
+
+	}
+
+	public void AgregarLlamada()
+	{
+		Llamada.Detalles.Add(new LlamadaDetalles()
+		{
+			LlamadaDetalleId = Llamada.LlamadaId,
+			Problemas = Problemas,
+			Solucion = Solucion
+
+		}) ;
+		
+	}
+
+	public void Buscar()
+	{
+		var llamada = controller.Buscar(Llamada.LlamadaId);
+
+		if (llamada !=null)
+		{
+			Limpiar();
+			Llamada = llamada;
+		}
+		else
+		{
+			mensaje = "Llamada no Existe";
+		}
+	}
+
+	public void Eliminar()
+	{
+		var llamada = controller.Buscar(Llamada.LlamadaId);
+
+		if (llamada!=null)
+		{
+			controller.Eliminar(Llamada.LlamadaId);
+			Limpiar();
+			mensaje = "Llamada Eliminada";
+		}
+		else
+		{
+			Limpiar();
+			mensaje = "Error al Eliminar Esta Llamada";
+		}
+	}
+
+	public void Limpiar()
+	{
+		mensaje = "";
+		this.Llamada = new Llamadas();
+	}
+
+}
