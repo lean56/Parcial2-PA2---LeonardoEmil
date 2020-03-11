@@ -1,10 +1,11 @@
 ﻿@page "/rllamadas"
+@page "/rllamadas/{LlamadaId:int}"
 
 
 <h3>Registro de Llamadas</h3>
 
 <EditForm Model="Llamada" OnValidSubmit="Guardar">
-	<DataAnnotationsValidator/>
+	<DataAnnotationsValidator />
 
 	<div class="container">
 		<div class="form-group">
@@ -16,53 +17,54 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group row">
 			<label for="descripcion">Descripcion</label>
-			<div class="input-group col-3">
+			<div class="input-group col-5">
 				<InputText @bind-Value="@Llamada.Descripcion" class="form-control" />
 				<ValidationMessage For="@(()=>Llamada.Descripcion)" />
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group row">
 			<label for="problemas">Problemas</label>
-			<div class="input-group col-3">
+			<div class="col-4">
 				<InputText @bind-Value="@Problemas" class="form-control" />
 			</div>
-		</div>
-
-		<div class="form-group">
 			<label for="solucion">Solucion</label>
-			<div class="input-group col-3">
+			<div class="col-4">
 				<InputText @bind-Value="@Solucion" class="form-control" />
-				<button type="button" class="btn btn-outline-secondary" @onclick="AgregarLlamada">Agregar</button>
-			</div>	
+			</div>
+			<button type="button" class="btn btn-outline-secondary" @onclick="AgregarLlamada">Agregar</button>
+
 		</div>
 
-		<table class="table">
-			<thead class="thead-dark">
-				<tr>
-					<td>Id</td>
-					<td>Problema</td>
-					<td>Solucion</td>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in Llamada.Detalles)
-				{
+		<div class="card-body">
+			<table class="table">
+				<thead>
 					<tr>
-						<td>@item.LlamadaDetalleId</td>
-						<td>@item.Problemas</td>
-						<td>@item.Solucion</td>
+						<td>Id</td>
+						<td>Problema</td>
+						<td>Solucion</td>
 					</tr>
-				}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					@foreach (var item in Llamada.Detalles)
+					{
+						<tr>
+							<td>@item.LlamadaDetalleId</td>
+							<td>@item.Problemas</td>
+							<td>@item.Solucion</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
 	</div>
+
 
 	<div class="form-group">
 		<button type="button" class="btn btn-outline-info" @onclick="Limpiar">Limpiar</button>
-		<button type="submit" class="btn btn-outline-success" >Guardar</button>
+		<button type="submit" class="btn btn-outline-success">Guardar</button>
 		<button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
 	</div>
 
@@ -74,7 +76,16 @@
 	protected override void OnInitialized()
 	{
 		Llamada = new Llamadas();
+
+		if (LlamadaId!=0)
+		{
+			Llamada.LlamadaId = LlamadaId;
+			Buscar();
+		}
 	}
+
+	[Parameter]
+	public int LlamadaId { get; set; }
 
 	public Llamadas Llamada { get; set; }
 	private string mensaje;
@@ -105,15 +116,16 @@
 			Problemas = Problemas,
 			Solucion = Solucion
 
-		}) ;
-		
+		});
+
+
 	}
 
 	public void Buscar()
 	{
 		var llamada = controller.Buscar(Llamada.LlamadaId);
 
-		if (llamada !=null)
+		if (llamada != null)
 		{
 			Limpiar();
 			Llamada = llamada;
@@ -128,7 +140,7 @@
 	{
 		var llamada = controller.Buscar(Llamada.LlamadaId);
 
-		if (llamada!=null)
+		if (llamada != null)
 		{
 			controller.Eliminar(Llamada.LlamadaId);
 			Limpiar();
