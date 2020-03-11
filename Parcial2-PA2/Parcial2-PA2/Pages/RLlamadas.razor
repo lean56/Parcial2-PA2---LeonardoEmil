@@ -39,8 +39,8 @@
 		</div>
 
 		<div class="card-body">
-			<table class="table">
-				<thead>
+			<table class="table table-dark">
+				<thead class="thead-light">
 					<tr>
 						<td>Id</td>
 						<td>Problema</td>
@@ -62,7 +62,7 @@
 	</div>
 
 
-	<div class="form-group">
+	<div class="form-group text-center">
 		<button type="button" class="btn btn-outline-info" @onclick="Limpiar">Limpiar</button>
 		<button type="submit" class="btn btn-outline-success">Guardar</button>
 		<button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
@@ -89,23 +89,44 @@
 
 	public Llamadas Llamada { get; set; }
 	private string mensaje;
-	private string Problemas;
-	private string Solucion;
+	private string Problemas="";
+	private string Solucion="";
 
 
 	LlamadaController controller = new LlamadaController();
 
 	public void Guardar()
 	{
-		if (controller.Guardar(Llamada))
+		if (Problemas == "")
 		{
-			mensaje = "Llamada Registrada";
+			mensaje = "Debes agregar un problema";
 		}
 		else
 		{
-			mensaje = "Error al Registrar Llamada";
+			if (Solucion == string.Empty)
+			{
+				mensaje = "Debes agregar una Solucion";
+			}
+			else
+			{
+				if (Llamada.Detalles == null)
+				{
+					mensaje = "Debes agregar los datos";
+				}
+				else
+				{
+					if (controller.Guardar(Llamada))
+					{
+						Limpiar();
+						mensaje = "Llamada Registrada";
+					}
+					else
+					{
+						mensaje = "Error al Registrar Llamada";
+					}
+				}
+			}
 		}
-
 	}
 
 	public void AgregarLlamada()
@@ -128,10 +149,13 @@
 		if (llamada != null)
 		{
 			Limpiar();
+
 			Llamada = llamada;
+			Llamada.Descripcion = "";
 		}
 		else
 		{
+			Limpiar();
 			mensaje = "Llamada no Existe";
 		}
 	}
@@ -156,7 +180,9 @@
 	public void Limpiar()
 	{
 		mensaje = "";
-		this.Llamada = new Llamadas();
+		Problemas = "";
+		Solucion = "";
+		Llamada = new Llamadas();
 	}
 
 }

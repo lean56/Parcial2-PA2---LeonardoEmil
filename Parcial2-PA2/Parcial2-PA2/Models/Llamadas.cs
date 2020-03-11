@@ -11,6 +11,7 @@ namespace Parcial2_PA2.Models
     {
         [Key]
         public int LlamadaId { get; set; }
+        [Required(ErrorMessage ="Debes Agregar una Descripcion")]
         public string Descripcion { get; set; }
     
         [ForeignKey("LlamadaDetalleId")]

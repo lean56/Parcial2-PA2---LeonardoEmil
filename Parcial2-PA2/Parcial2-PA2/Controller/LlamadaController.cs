@@ -23,6 +23,11 @@ namespace Parcial2_PA2.Controller
                     paso = Insertar(llamada);
                 }
                 else
+                if (Buscar(llamada.LlamadaId)!=null)
+                {
+                    paso = false;
+                }
+                else
                 {
                     paso = Modificar(llamada);
                 }
