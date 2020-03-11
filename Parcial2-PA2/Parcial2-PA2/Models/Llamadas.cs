@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Parcial2_PA2.Models
 {
-    public class Llamada
+    public class Llamadas
     {
         [Key]
         public int LlamadaId { get; set; }
@@ -15,7 +15,7 @@ namespace Parcial2_PA2.Models
     
         [ForeignKey("LlamadaDetalleId")]
         public List<LlamadaDetalles> Detalles { get; set; }
-        public Llamada()
+        public Llamadas()
         {
             LlamadaId = 0;
             Descripcion = string.Empty;
