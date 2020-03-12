@@ -2,7 +2,7 @@
 
 namespace Parcial2_PA2.Migrations
 {
-    public partial class inicial : Migration
+    public partial class migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace Parcial2_PA2.Migrations
                 {
                     LlamadaId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Descripcion = table.Column<string>(nullable: true)
+                    Descripcion = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -23,7 +23,9 @@ namespace Parcial2_PA2.Migrations
                 name: "LlamadaDetalles",
                 columns: table => new
                 {
-                    LlamadaDetalleId = table.Column<int>(nullable: false),
+                    LlamadaDetalleId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LlamadaId = table.Column<int>(nullable: false),
                     Problemas = table.Column<string>(nullable: true),
                     Solucion = table.Column<string>(nullable: true)
                 },
@@ -31,12 +33,17 @@ namespace Parcial2_PA2.Migrations
                 {
                     table.PrimaryKey("PK_LlamadaDetalles", x => x.LlamadaDetalleId);
                     table.ForeignKey(
-                        name: "FK_LlamadaDetalles_Llamadas_LlamadaDetalleId",
-                        column: x => x.LlamadaDetalleId,
+                        name: "FK_LlamadaDetalles_Llamadas_LlamadaId",
+                        column: x => x.LlamadaId,
                         principalTable: "Llamadas",
                         principalColumn: "LlamadaId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LlamadaDetalles_LlamadaId",
+                table: "LlamadaDetalles",
+                column: "LlamadaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

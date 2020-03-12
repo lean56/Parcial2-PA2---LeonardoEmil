@@ -23,7 +23,7 @@ namespace Parcial2_PA2.Controller
                     paso = Insertar(llamada);
                 }
                 else
-                if (Buscar(llamada.LlamadaId)!=null)
+                if (Buscar(llamada.LlamadaId)==null)
                 {
                     paso = false;
                 }
@@ -70,7 +70,7 @@ namespace Parcial2_PA2.Controller
 
                 foreach (var item in llamada.Detalles)
                 {
-                    contexto.Entry(llamada).State = EntityState.Added;
+                    contexto.Entry(item).State = EntityState.Added;
                 }
 
                 contexto.Llamadas.Add(llamada);

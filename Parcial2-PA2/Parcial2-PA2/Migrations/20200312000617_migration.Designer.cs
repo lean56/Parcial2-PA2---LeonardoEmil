@@ -8,8 +8,8 @@ using Parcial2_PA2.Data;
 namespace Parcial2_PA2.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20200311222658_inicial")]
-    partial class inicial
+    [Migration("20200312000617_migration")]
+    partial class migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,10 @@ namespace Parcial2_PA2.Migrations
             modelBuilder.Entity("Parcial2_PA2.Models.LlamadaDetalles", b =>
                 {
                     b.Property<int>("LlamadaDetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LlamadaId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Problemas")
@@ -29,6 +33,8 @@ namespace Parcial2_PA2.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("LlamadaDetalleId");
+
+                    b.HasIndex("LlamadaId");
 
                     b.ToTable("LlamadaDetalles");
                 });
@@ -40,6 +46,7 @@ namespace Parcial2_PA2.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("LlamadaId");
@@ -51,7 +58,7 @@ namespace Parcial2_PA2.Migrations
                 {
                     b.HasOne("Parcial2_PA2.Models.Llamadas", null)
                         .WithMany("Detalles")
-                        .HasForeignKey("LlamadaDetalleId")
+                        .HasForeignKey("LlamadaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

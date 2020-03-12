@@ -14,7 +14,7 @@ namespace Parcial2_PA2.Models
         [Required(ErrorMessage ="Debes Agregar una Descripcion")]
         public string Descripcion { get; set; }
     
-        [ForeignKey("LlamadaDetalleId")]
+        [ForeignKey("LlamadaId")]
         public List<LlamadaDetalles> Detalles { get; set; }
         public Llamadas()
         {

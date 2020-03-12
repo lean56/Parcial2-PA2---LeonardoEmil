@@ -18,6 +18,10 @@ namespace Parcial2_PA2.Migrations
             modelBuilder.Entity("Parcial2_PA2.Models.LlamadaDetalles", b =>
                 {
                     b.Property<int>("LlamadaDetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LlamadaId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Problemas")
@@ -27,6 +31,8 @@ namespace Parcial2_PA2.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("LlamadaDetalleId");
+
+                    b.HasIndex("LlamadaId");
 
                     b.ToTable("LlamadaDetalles");
                 });
@@ -38,6 +44,7 @@ namespace Parcial2_PA2.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("LlamadaId");
@@ -49,7 +56,7 @@ namespace Parcial2_PA2.Migrations
                 {
                     b.HasOne("Parcial2_PA2.Models.Llamadas", null)
                         .WithMany("Detalles")
-                        .HasForeignKey("LlamadaDetalleId")
+                        .HasForeignKey("LlamadaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
